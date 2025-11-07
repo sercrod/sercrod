@@ -39,11 +39,9 @@ Make the message editable by the user.
 
 <!-- Interactive sample -->
 ```html
-<na-blla>
-  <section *let="name='World'">
+<na-blla data='{"name":"World"}'>
     <h2>Hello, %name%!</h2>
     <input *input="name" placeholder="Type your name..." />
-  </section>
 </na-blla>
 ```
 
