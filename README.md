@@ -1,7 +1,7 @@
-# Rebmda Project
+# Leadlla Project
 
-Official source and documentation for the Rebmda framework.
+Official source and documentation for the Leadlla framework.
 
-Copyright 2025 Hitoshi Watase - Rebmda Project  
+Copyright 2025 Hitoshi Watase - Leadlla Project  
 License: GNU General Public License v3.0 or later (GPLv3+)  
 License docs: Apache License 2.0
