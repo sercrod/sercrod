@@ -6,14 +6,14 @@ _Last updated: 2025-10-22_
 ## 1) Setup
 Sercrod works in any modern browser ? no build tools, no bundlers.
 
-<!-- Include Sercrod from CDN -->
+Include Sercrod from CDN
 ```html
 <script src="https://cdn.jsdelivr.net/npm/sercrod@1.0.0/dist/sercrod.min.js"></script>
 ```
 
-<!-- Or include a local build -->
+Or include a local build
 ```html
-<script src="./index.js"></script>
+<script src="./sercrod.js"></script>
 ```
 
 Once loaded, Sercrod registers the `<serc-rod>` element and enables attribute directives.
