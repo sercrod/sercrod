@@ -4454,7 +4454,7 @@ _dummy(){void(/\/\//);} // vim 整形のためのダミー
 				//if(customElements.get(node.localName)) return NodeFilter.FILTER_REJECT;
 
 				// B 案
-				// Sercrod のみ CE の内部は干渉しない（通常要素に絞って走査。通常要素の子も走査。Nabbla なら子を含めて走査しない。）
+				// Sercrod のみ CE の内部は干渉しない（通常要素に絞って走査。通常要素の子も走査。Sercrod なら子を含めて走査しない。）
 				if(node instanceof Sercrod) return NodeFilter.FILTER_REJECT;
 
 				return NodeFilter.FILTER_ACCEPT; // それ以外は調べる
