@@ -4,15 +4,15 @@ _What you will find:_ normative rules for world isolation. This page defines how
 
 ## Definitions
 
-- **Host**: a custom element instance that runs Nablla.
-- **World**: a logical namespace that groups hosts sharing the same Nablla registration. Worlds own their registries and caches.
+- **Host**: a custom element instance that runs Sercrod.
+- **World**: a logical namespace that groups hosts sharing the same Sercrod registration. Worlds own their registries and caches.
 - **Global layer**: implementation-wide defaults that may be visible to all worlds unless overridden.
 
 ## World creation and naming
 
-- A world is created when a Nablla custom element is defined.
-- Each tag name bound to the Nablla implementation belongs to one world. Implementations may derive the world key from the tag name.
-- Multiple distinct tags may map to the same Nablla constructor. If so, they are part of the same world unless the implementation chooses to separate them.
+- A world is created when a Sercrod custom element is defined.
+- Each tag name bound to the Sercrod implementation belongs to one world. Implementations may derive the world key from the tag name.
+- Multiple distinct tags may map to the same Sercrod constructor. If so, they are part of the same world unless the implementation chooses to separate them.
 
 ## Membership and boundaries
 
@@ -40,9 +40,9 @@ Implementations may expose registration functions that either target the current
 
 ## `$parent` across worlds
 
-- During `*let` evaluation, `$parent` refers to the nearest ancestor host that the implementation recognizes as a Nablla host.
+- During `*let` evaluation, `$parent` refers to the nearest ancestor host that the implementation recognizes as a Sercrod host.
 - If the ancestor belongs to a different world that is not recognized as the same implementation, `$parent` is not linked.
-- If multiple tags are registered to the same Nablla implementation, `$parent` resolution can traverse them as a single lineage.
+- If multiple tags are registered to the same Sercrod implementation, `$parent` resolution can traverse them as a single lineage.
 
 ## Scheduler independence
 

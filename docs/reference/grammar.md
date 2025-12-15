@@ -1,6 +1,6 @@
 # Grammar
 
-_What you will find:_ a formal description of directive value shapes and handler syntax as implemented in Nablla v1.06. This page is normative, concise, and tutorial-free.
+_What you will find:_ a formal description of directive value shapes and handler syntax as implemented in Sercrod v1.06. This page is normative, concise, and tutorial-free.
 
 ## 0. Legend (tokens and notation)
 
@@ -204,7 +204,7 @@ WS                ::= space or tab characters only
 The function is resolved in this order:
 1. `this.fnRegistry[FnName]`
 2. `this.constructor.strictRegistry[FnName]`
-3. `Nablla.strictRegistry[FnName]` (shared reference to `window.__Nablla_strict`)
+3. `Sercrod.strictRegistry[FnName]` (shared reference to `window.__Sercrod_strict`)
 4. Compatibility fallback: `this.constructor.fnRegistry[FnName]`
 5. Final fallback: `globalThis[FnName]`
 

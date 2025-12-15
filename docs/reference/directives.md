@@ -1,6 +1,6 @@
 # Directives
 
-_What you will find:_ a precise, alphabetical-by-category reference of every directive and shorthand Nablla recognizes. Each entry states the value form, when it is evaluated, and what side effects it has on data, attributes, DOM, and events. No tutorials or design commentary are included.
+_What you will find:_ a precise, alphabetical-by-category reference of every directive and shorthand Sercrod recognizes. Each entry states the value form, when it is evaluated, and what side effects it has on data, attributes, DOM, and events. No tutorials or design commentary are included.
 
 ## Conventions
 
@@ -53,7 +53,7 @@ _What you will find:_ a precise, alphabetical-by-category reference of every dir
 
 ### `*for="loopExpr"`
 - **When:** render time and on updates.
-- **Effect:** low-level looping. `loopExpr` must evaluate to an iterable or a structure that Nablla can iterate. Each iteration renders one instance of the element. Use `*each` for common array/object cases.
+- **Effect:** low-level looping. `loopExpr` must evaluate to an iterable or a structure that Sercrod can iterate. Each iteration renders one instance of the element. Use `*each` for common array/object cases.
 
 ---
 
@@ -171,13 +171,13 @@ _What you will find:_ a precise, alphabetical-by-category reference of every dir
 ### `*upload="targetExpr"`
 - **When:** user selects files via the control.
 - **Effect:** sends selected files using XHR with progress events.  
-  - Events: `nablla-upload-start`, `nablla-upload-progress`, `nablla-uploaded`.  
+  - Events: `sercrod-upload-start`, `sercrod-upload-progress`, `sercrod-uploaded`.  
   - Result storage: sets `$upload` and, if `*into` is present, also writes to that key for the current cycle.
 
 ### `*download="urlOrBlobExpr"`
 - **When:** on evaluation.
 - **Effect:** downloads a resource or generated Blob.  
-  - Events: `nablla-download-start`, `nablla-downloaded`.  
+  - Events: `sercrod-download-start`, `sercrod-downloaded`.  
   - Result storage: sets `$download` and respects `*into` if present.
 
 ---
@@ -188,7 +188,7 @@ _What you will find:_ a precise, alphabetical-by-category reference of every dir
 - **When:** on render and when parameters change or the host is force-updated.
 - **Effect:** opens a WebSocket connection.  
   - State keys on host data: `$ws_ready`, `$ws_error`, `$ws_last`, `$ws_messages[]`, `$ws_closed_at`, `$ws_close_code`, `$ws_close_reason`.  
-  - Events: `nablla-ws-before-connect`, `nablla-ws-open`, `nablla-ws-message` (payload JSON auto-detected), `nablla-ws-error`, `nablla-ws-close`.  
+  - Events: `sercrod-ws-before-connect`, `sercrod-ws-open`, `sercrod-ws-message` (payload JSON auto-detected), `sercrod-ws-error`, `sercrod-ws-close`.  
   - Host exposes methods under `el.websocket.{connect,reconnect,close,send,status,urls}`.
 
 ### `*ws-send="payloadExpr"`
@@ -240,7 +240,7 @@ _What you will find:_ a precise, alphabetical-by-category reference of every dir
 
 ## Errors and events
 
-- Failures in network, file, or WebSocket operations emit corresponding events (`nablla-error` and operation-specific events). Implementations may also log warnings.  
+- Failures in network, file, or WebSocket operations emit corresponding events (`sercrod-error` and operation-specific events). Implementations may also log warnings.  
 - Directives that assign to data keys update the reactive store and schedule rendering according to the host’s coalescing policy.
 
 ---

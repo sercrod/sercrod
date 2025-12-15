@@ -10,13 +10,13 @@ _What you will find:_ normative details for hooks, filters, method injection, ev
 - Parsed ASTs are cached by template string. Reusing the same template string reuses the cached AST.
 
 ### Hook execution
-- After parse and before rendering, Nablla runs registered AST hooks in registration order.
+- After parse and before rendering, Sercrod runs registered AST hooks in registration order.
 - A hook receives the AST and may modify nodes or metadata. The hook must return either the same AST node or a replacement acceptable to the renderer.
 - Hook failures do not crash the host by default - the implementation logs a warning and continues with the previous AST state when possible.
 
 ### Registration
-- Implementations expose an API such as `Nablla.register_ast_hook(fn)` that registers a function for the current world.
-- Implementations may also read pre-registered hooks from an ambient array (for example `window.__Nablla_ast_hooks`) during initialization.
+- Implementations expose an API such as `Sercrod.register_ast_hook(fn)` that registers a function for the current world.
+- Implementations may also read pre-registered hooks from an ambient array (for example `window.__Sercrod_ast_hooks`) during initialization.
 - World scoping applies - hooks are registered to the current world unless an explicit global registration API is used.
 
 ### Caching and invalidation
@@ -80,8 +80,8 @@ Implementations ship a default set of filters and apply them at fixed points:
 ## Logging and errors
 
 ### Error events
-- Network and file operations emit completion events and `nablla-error` on failure.
-- WebSocket operations emit `nablla-ws-*` events for open, message, error, and close.
+- Network and file operations emit completion events and `sercrod-error` on failure.
+- WebSocket operations emit `sercrod-ws-*` events for open, message, error, and close.
 - Implementations may attach additional details to event `detail` objects.
 
 ### Console logging
@@ -107,7 +107,7 @@ Implementations ship a default set of filters and apply them at fixed points:
 
 ## Configuration switches
 
-- Auto-define - implementations may auto-register the default tag (for example `<na-blla>`). A configuration flag may disable auto-define so users can register custom tags manually.
+- Auto-define - implementations may auto-register the default tag (for example `<serc-rod>`). A configuration flag may disable auto-define so users can register custom tags manually.
 - Strict mode - `*strict` enables stricter evaluation rules for its subtree as defined by the implementation.
 
 ## Security notes

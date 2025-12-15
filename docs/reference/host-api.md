@@ -1,10 +1,10 @@
 # Host API
 
-_What you will find:_ the public surface of a Nablla host element (e.g., `<na-blla>`): properties, methods, observed attributes, helper objects, and their behaviors. No tutorials or design commentary are included.
+_What you will find:_ the public surface of a Sercrod host element (e.g., `<serc-rod>`): properties, methods, observed attributes, helper objects, and their behaviors. No tutorials or design commentary are included.
 
 ## Element identity
 
-- **Custom element**: a Nablla host is a custom element instance. The default tag is `<na-blla>` unless auto-definition is disabled by configuration.
+- **Custom element**: a Sercrod host is a custom element instance. The default tag is `<serc-rod>` unless auto-definition is disabled by configuration.
 - **Independence**: each host maintains its own data scope, scheduler, caches, and directive state. Nested hosts are independent unless the user explicitly shares data.
 
 ## Observed attributes
@@ -55,11 +55,11 @@ Changes to other attributes are handled by the binding system during rendering b
 
 A host dispatches CustomEvents for lifecycle and side-effect operations. The core set includes:
 
-- `nablla-updated` after each successful render cycle  
-- `nablla-api` on HTTP completion (`*fetch`, `*post`, `*api`)  
-- `nablla-upload-*` / `nablla-downloaded` for file transfers  
-- `nablla-ws-*` for WebSocket lifecycle  
-- `nablla-error` on unrecoverable failures surfaced to the host
+- `sercrod-updated` after each successful render cycle  
+- `sercrod-api` on HTTP completion (`*fetch`, `*post`, `*api`)  
+- `sercrod-upload-*` / `sercrod-downloaded` for file transfers  
+- `sercrod-ws-*` for WebSocket lifecycle  
+- `sercrod-error` on unrecoverable failures surfaced to the host
 
 Full list and `detail` payloads: see `events.md`.
 
@@ -67,7 +67,7 @@ Full list and `detail` payloads: see `events.md`.
 
 - `$upload`, `$download` and all keys designated by `*into` are transient.  
 - Visibility: they are available for the cycle that produced them.  
-- Cleanup: cleared in the next-frame finalization after `nablla-updated`.
+- Cleanup: cleared in the next-frame finalization after `sercrod-updated`.
 
 ## Scheduler behavior
 

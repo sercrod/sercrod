@@ -1,7 +1,7 @@
 # Data Fundamentals
 _Last updated: 2025-10-22_
 
-> This chapter explains how data is defined, stored, and displayed in Nablla, using simple examples with *let and data attributes.  
+> This chapter explains how data is defined, stored, and displayed in Sercrod, using simple examples with *let and data attributes.  
 
 ## 3) From `*let` to `data` - the smallest ladder
 
@@ -14,90 +14,90 @@ Use *let only for short-lived locals (loops/branches).
 ### Step 1: Recap (`*let` makes a value and shows it)
 
 ```html
-<na-blla>
-  <p *let="message = 'Hello Nablla!'" *print="message"></p>
-</na-blla>
+<serc-rod>
+  <p *let="message = 'Hello Sercrod!'" *print="message"></p>
+</serc-rod>
 
-<p>Hello Nablla!</p>
-^ rendered output (omit `<na-blla>`)
+<p>Hello Sercrod!</p>
+^ rendered output (omit `<serc-rod>`)
 
 ```
 
 ### Step 2: Make it stable (move the same value into `data`)
 
 ```html
-<na-blla data='{"message":"Hello Nablla!"}'>
+<serc-rod data='{"message":"Hello Sercrod!"}'>
   <p *print="message"></p>
-</na-blla>
+</serc-rod>
 
-<p>Hello Nablla!</p>
-^ rendered output (omit `<na-blla>`)
+<p>Hello Sercrod!</p>
+^ rendered output (omit `<serc-rod>`)
 ```
 
 ### Step 3: Another primitive (number)
 
 ```html
-<na-blla data='{"count":0}'>
+<serc-rod data='{"count":0}'>
   <p *print="count"></p>
-</na-blla>
+</serc-rod>
 
 <p>0</p>
-^ Rendered output (omit `<na-blla>`)
+^ Rendered output (omit `<serc-rod>`)
 ```
 
 ### Step 4: Quick variants (boolean and null)
 
 ```html
-<na-blla data='{"flag":true}'>
+<serc-rod data='{"flag":true}'>
   <p *print="flag"></p>
-</na-blla>
+</serc-rod>
 
 <p>true</p>
-^ Rendered output (omit `<na-blla>`)
+^ Rendered output (omit `<serc-rod>`)
 ```
 
 ```html
-<na-blla data='{"note":null}'>
+<serc-rod data='{"note":null}'>
   <p *print="note"></p>
-</na-blla>
+</serc-rod>
 
 <p></p>
-^ Rendered output (omit `<na-blla>`)
+^ Rendered output (omit `<serc-rod>`)
 ```
 
 ### Step 5: A tiny object (two fields)
 
 ```html
-<na-blla data='{"item":"Pencil","stock":12}'>
+<serc-rod data='{"item":"Pencil","stock":12}'>
   <p *print="item"></p>
   <p *print="stock"></p>
-</na-blla>
+</serc-rod>
 
 <p>Pencil</p>
 <p>12</p>
-^ Rendered output (omit `<na-blla>`)
+^ Rendered output (omit `<serc-rod>`)
 ```
 
 ### Step 6: A small array (iterate with `*for`)
 
 ```html
-<na-blla data='{"items":["Pencil","Notebook","Eraser"]}'>
+<serc-rod data='{"items":["Pencil","Notebook","Eraser"]}'>
   <ul>
     <li *for="item of items">%item%</li>
   </ul>
-</na-blla>
+</serc-rod>
 
 <ul>
   <li>Pencil</li>
   <li>Notebook</li>
   <li>Eraser</li>
 </ul>
-^ Rendered output (omit `<na-blla>`)
+^ Rendered output (omit `<serc-rod>`)
 ```
 
 ### Note: `data` is always text
 
-The `data` attribute is always a text value. Nablla reads and parses it as JSON when the component starts.  
+The `data` attribute is always a text value. Sercrod reads and parses it as JSON when the component starts.  
 This is why all keys and strings must be quoted and why functions cannot be placed directly inside `data`.
 
 ## Summary

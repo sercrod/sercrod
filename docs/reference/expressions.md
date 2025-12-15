@@ -1,6 +1,6 @@
 # Expressions
 
-_What you will find:_ normative rules for how Nablla evaluates expressions: where they can appear, what names are in scope, what side effects do, and what is guaranteed. No tutorials or design commentary are included.
+_What you will find:_ normative rules for how Sercrod evaluates expressions: where they can appear, what names are in scope, what side effects do, and what is guaranteed. No tutorials or design commentary are included.
 
 ## Where expressions appear
 

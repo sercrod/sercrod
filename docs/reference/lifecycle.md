@@ -4,10 +4,10 @@ _What you will find:_ the host element’s lifecycle from initialization to fina
 
 ## Lifecycle timeline
 
-A Nablla host proceeds through these phases:
+A Sercrod host proceeds through these phases:
 
 1. **Construction**
-   - A custom element instance is created. The default tag `<na-blla>` is auto-defined unless auto-define is disabled by configuration.
+   - A custom element instance is created. The default tag `<serc-rod>` is auto-defined unless auto-define is disabled by configuration.
    - Internal fields are initialized, including data wrappers, template cache handles, and scheduler flags.
 
 2. **Connection**

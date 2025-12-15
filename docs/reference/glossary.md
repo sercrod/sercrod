@@ -1,6 +1,6 @@
 # Glossary
 
-_What you will find:_ concise, alphabetized definitions of terms used in the Nablla reference. Entries are normative and link to the relevant pages.
+_What you will find:_ concise, alphabetized definitions of terms used in the Sercrod reference. Entries are normative and link to the relevant pages.
 
 ## A
 
@@ -35,7 +35,7 @@ Events dispatched by the host to report lifecycle and side-effect results. See [
 Reactive object powering expressions and bindings for a host. Backed by a Proxy. See [Core Concepts](./core-concepts.md).
 
 **Directive**  
-An attribute that instructs Nablla. Exists in `*` and `n-` forms with equivalent behavior. See [Directives](./directives.md).
+An attribute that instructs Sercrod. Exists in `*` and `n-` forms with equivalent behavior. See [Directives](./directives.md).
 
 ## E
 
@@ -43,7 +43,7 @@ An attribute that instructs Nablla. Exists in `*` and `n-` forms with equivalent
 Attribute `@type="expr"` that runs an expression on native events. Supports modifiers such as `.prevent`, `.stop`. See [Directives](./directives.md).
 
 **Expression**  
-JavaScript snippet evaluated by Nablla in a defined context. See [Expressions](./expressions.md).
+JavaScript snippet evaluated by Sercrod in a defined context. See [Expressions](./expressions.md).
 
 ## F
 
@@ -52,8 +52,8 @@ Named transformation applied at fixed points such as text, HTML, attributes, sty
 
 ## H
 
-**Host (Nablla host)**  
-Custom element instance that runs Nablla for its subtree. Defaults to `<na-blla>`. See [Host API](./host-api.md).
+**Host (Sercrod host)**  
+Custom element instance that runs Sercrod for its subtree. Defaults to `<serc-rod>`. See [Host API](./host-api.md).
 
 ## I
 

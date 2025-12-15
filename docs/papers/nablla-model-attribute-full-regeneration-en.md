@@ -1,4 +1,4 @@
-# The Nablla Model: An Attribute-Driven Full Regeneration Approach to Web UI without Virtual DOM
+# The Sercrod Model: An Attribute-Driven Full Regeneration Approach to Web UI without Virtual DOM
 
 ## Chapter 1. Introduction
 
@@ -9,24 +9,24 @@ The model is not a manual for a particular library or tool. Instead, it is defin
 > **data (scope) → attributes → DOM**
 
 as a single, one-way pipeline.  
-As a concrete reference implementation of this principle, the document refers to **Nablla** (working name), but the model itself is intended to be independent of any specific implementation.
+As a concrete reference implementation of this principle, the document refers to **Sercrod** (working name), but the model itself is intended to be independent of any specific implementation.
 
 In contemporary Web development, many approaches have been proposed to abstract DOM updates, including virtual DOM based and declarative UI systems. These often maintain an internal virtual structure and compute differences to apply to the actual DOM.
 
-By contrast, Nablla does not maintain a virtual structure. It treats HTML attributes and the DOM itself as the primary carriers of UI description, and expresses UI changes as a linear flow:
+By contrast, Sercrod does not maintain a virtual structure. It treats HTML attributes and the DOM itself as the primary carriers of UI description, and expresses UI changes as a linear flow:
 
 > **change in data ⇒ update of attributes ⇒ reconstruction of the DOM**
 
 Here, **attribute-first** means that the official representation of UI state is concentrated in attributes and the DOM, without maintaining any separate source of truth.
 
-Nablla uses Custom Elements (Web Components), but it does **not** rely on hidden rendering optimizations or special partial repaint behavior provided by Web Components. The main observations are:
+Sercrod uses Custom Elements (Web Components), but it does **not** rely on hidden rendering optimizations or special partial repaint behavior provided by Web Components. The main observations are:
 
 - Browsers, DOM parsers, or virtual browsers execute layout and paint according to JavaScript-driven DOM operations.
 - Using Web Components does not, by itself, provide special differential rendering semantics.
 
-Nablla is instead characterized by the way it encapsulates an **attribute-first UI model** inside Custom Elements, and then runs it directly on top of the standard DOM engine of the browser or DOM runtime.
+Sercrod is instead characterized by the way it encapsulates an **attribute-first UI model** inside Custom Elements, and then runs it directly on top of the standard DOM engine of the browser or DOM runtime.
 
-The purpose of this document is not to advertise Nablla as a product, but to record the design and observational results as:
+The purpose of this document is not to advertise Sercrod as a product, but to record the design and observational results as:
 
 - a conceptual description of an attribute-driven model  
 - a formalization of the internal model (scope, attributes, DOM)  
@@ -37,11 +37,11 @@ The scope of this document is:
 
 - to organize the rendering model centered on attributes  
 - to describe the observed behavior of rendering and updates in standard environments  
-- to abstract the internal structure and procedures of Nablla  
+- to abstract the internal structure and procedures of Sercrod  
 - to position the model as a UI approach distinct from virtual DOM based systems  
 - to discuss the academic and practical implications of an attribute-centric model  
 
-In what follows, the name **Nablla** denotes both a specific implementation and, more importantly, a concrete instance of the attribute-driven full regeneration model described here.
+In what follows, the name **Sercrod** denotes both a specific implementation and, more importantly, a concrete instance of the attribute-driven full regeneration model described here.
 
 ---
 
@@ -60,7 +60,7 @@ The document targets UI update models that satisfy all of the following conditio
 
 A model with these properties is called here the **attribute-driven full regeneration model**.
 
-Nablla implements this model in the following way:
+Sercrod implements this model in the following way:
 
 - UI logic is described as attributes inside HTML.  
 - Each Custom Element holds its own template.  
@@ -79,21 +79,21 @@ This creates a layered pipeline of
 
 > **state → virtual structure → diff → DOM**.
 
-In contrast, the Nablla type model adopts a more direct three-step path:
+In contrast, the Sercrod type model adopts a more direct three-step path:
 
 > **state (scope) → attributes → DOM**.
 
-The important point is not that Nablla is faster than virtual DOM approaches, but that Nablla **does not maintain a virtual DOM at all**.
+The important point is not that Sercrod is faster than virtual DOM approaches, but that Sercrod **does not maintain a virtual DOM at all**.
 
 In virtual DOM based approaches, developers must often consider both internal state and the real DOM, and the diffing logic exists as a separate layer from the core UI logic.  
-The Nablla type model avoids this layer entirely: under the attribute-first principle, the DOM is treated as the unique target structure and attributes are the official interface between state and DOM.
+The Sercrod type model avoids this layer entirely: under the attribute-first principle, the DOM is treated as the unique target structure and attributes are the official interface between state and DOM.
 
 ### 2.3 Role of Web Components
 
 In the model described here, Web Components (Custom Elements) play the following roles:
 
 1. **Scope boundary**  
-   Each Nablla element is a Custom Element and holds its own data scope, template, and lifecycle. This provides a natural boundary for UI segments.
+   Each Sercrod element is a Custom Element and holds its own data scope, template, and lifecycle. This provides a natural boundary for UI segments.
 
 2. **Attribute change hook**  
    Through `attributeChangedCallback` and related mechanisms, the element can receive notifications when specific attributes change, and then invoke its own internal logic such as `update()`.
@@ -102,7 +102,7 @@ The important point is that Web Components are not used for special rendering op
 
 ### 2.4 Positioning of the model
 
-With this in mind, the Nablla type model can be positioned conceptually as follows:
+With this in mind, the Sercrod type model can be positioned conceptually as follows:
 
 - It is not a virtual DOM based model.  
 - It is not merely a collection of imperative DOM operations.  
@@ -115,7 +115,7 @@ This document defines the model as an independent UI design framework, and organ
 
 ## Chapter 3. Fundamental Principles of the Attribute-Driven Model
 
-This chapter explains why the Nablla model adopts the attribute-first principle and how it defines the flow of state.
+This chapter explains why the Sercrod model adopts the attribute-first principle and how it defines the flow of state.
 
 ### 3.1 Treating HTML attributes as state
 
@@ -129,13 +129,13 @@ From this, the model treats attributes not as auxiliary information but as
 
 > **the primary medium for expressing UI state**.
 
-Nablla's attribute-first principle explicitly adopts this position.
+Sercrod's attribute-first principle explicitly adopts this position.
 
 ### 3.2 A one-way flow from attributes to DOM
 
 The DOM is a dynamic object representation of HTML as a tree structure. Attribute changes propagate to the node and, in principle, to its subtree.
 
-The Nablla type model explicitly defines this one-way flow:
+The Sercrod type model explicitly defines this one-way flow:
 
 > **scope values → attribute values → DOM node state**
 
@@ -148,7 +148,7 @@ At first glance this constraint might appear to reduce flexibility, but it offer
 
 ### 3.3 Relationship between templates and attributes
 
-Each Nablla element holds an internal template. This template is **not** a separate state world. Instead, it is treated as
+Each Sercrod element holds an internal template. This template is **not** a separate state world. Instead, it is treated as
 
 > **the static original form of HTML structure that includes attributes**.
 
@@ -178,7 +178,7 @@ For these reasons, attribute-first is not just a stylistic preference but a desi
 
 ### 3.5 DOM as the single source of truth
 
-In the Nablla type model, the DOM together with its attributes is the **only source of truth**.
+In the Sercrod type model, the DOM together with its attributes is the **only source of truth**.
 
 - The scope is input used during reconstruction.  
 - The template is the original form that prescribes the shape of the DOM.  
@@ -196,7 +196,7 @@ and forms the basic conceptual foundation of the model.
 
 ## Chapter 4. Web Standards Underpinning the Model
 
-This chapter summarizes the Web standards and behaviors on which the Nablla type model depends.
+This chapter summarizes the Web standards and behaviors on which the Sercrod type model depends.
 
 ### 4.1 Correspondence between HTML and the DOM
 
@@ -217,13 +217,13 @@ Many attributes are defined as reflecting attributes, synchronized with DOM prop
 - DOM state can be inspected via attributes.  
 - External scripts and internal implementations can share the same vocabulary for state.
 
-Nablla treats these facts as part of its base, and gives attributes the meaning of state containers.
+Sercrod treats these facts as part of its base, and gives attributes the meaning of state containers.
 
 ### 4.3 Custom Elements and attribute change hooks
 
 Custom Elements define `attributeChangedCallback` and related extension points to detect attribute changes.
 
-Nablla uses this to:
+Sercrod uses this to:
 
 - receive notifications when certain attributes change  
 - trigger internal processes such as `update()` in response to these changes
@@ -254,14 +254,14 @@ Detailed internal implementations differ by engine and are not fully specified, 
 - The region of layout and paint is determined internally based on style and structure.  
 - Whether a node is part of a Custom Element usually does not change the units of reflow or repaint.
 
-The Nablla type model does **not** try to control this internal pipeline.  
+The Sercrod type model does **not** try to control this internal pipeline.  
 `update()` reconstructs the DOM, and layout or paint is then delegated to the standard behavior of the environment.
 
 ### 4.6 Event model
 
 The standard event model uses a three-phase propagation (capture, target, bubble) based on the DOM tree.
 
-Nablla attaches handlers defined as attributes (such as `n-input`) to DOM nodes. These handlers modify the scope if necessary, and then trigger `update()`.
+Sercrod attaches handlers defined as attributes (such as `n-input`) to DOM nodes. These handlers modify the scope if necessary, and then trigger `update()`.
 
 This yields two consistent flows:
 
@@ -272,7 +272,7 @@ This yields two consistent flows:
 
 All features discussed so far are part of existing Web standards and implementations.
 
-The Nablla type model requires no new native APIs. It constructs an attribute-first, full regeneration UI model on top of:
+The Sercrod type model requires no new native APIs. It constructs an attribute-first, full regeneration UI model on top of:
 
 - attribute-first semantics  
 - full regeneration of the DOM from templates  
@@ -313,19 +313,19 @@ The observations can be summarized as follows:
 
 3. **Large DOMs still complete updates within practical times**  
    In structures with tens of thousands of nodes, bulk updates of `textContent` or attributes complete within a practical time window, depending on the environment.  
-   This is attributed to the performance of the underlying DOM engine, not to any special rendering control by Nablla.
+   This is attributed to the performance of the underlying DOM engine, not to any special rendering control by Sercrod.
 
 ### 5.3 Clarifying common misunderstandings
 
 Based on these observations, the following conclusions are appropriate:
 
 - It is inaccurate to assume that “using Web Components automatically yields local rendering only”.  
-- UI updates in Nablla remain completely within the standard DOM processing pipeline.  
-- Local-looking repaints are due to the internal strategies of the environment, not to custom rendering algorithms implemented by Nablla.
+- UI updates in Sercrod remain completely within the standard DOM processing pipeline.  
+- Local-looking repaints are due to the internal strategies of the environment, not to custom rendering algorithms implemented by Sercrod.
 
-### 5.4 The assumptions adopted by Nablla
+### 5.4 The assumptions adopted by Sercrod
 
-With these observations as a base, the Nablla type model adopts the following stance:
+With these observations as a base, the Sercrod type model adopts the following stance:
 
 - Rather than optimizing rendering itself, the model focuses on clearly defining **how** the DOM is described and **how** it is updated.  
 - Performance depends largely on how directly and simply the model uses the DOM engine, and on how much additional abstraction is avoided.
@@ -334,13 +334,13 @@ The full regeneration update model, without a virtual DOM or complex diffing lay
 
 ---
 
-## Chapter 6. Distinctiveness of Nablla and the Attribute-Driven Control Model
+## Chapter 6. Distinctiveness of Sercrod and the Attribute-Driven Control Model
 
-This chapter explains where the Nablla type model is distinctive, not in terms of rendering tricks, but in terms of its descriptive and control structure.
+This chapter explains where the Sercrod type model is distinctive, not in terms of rendering tricks, but in terms of its descriptive and control structure.
 
 ### 6.1 A UI description system that treats attributes as primary
 
-Nablla provides a structured system for describing UI logic via HTML attributes:
+Sercrod provides a structured system for describing UI logic via HTML attributes:
 
 - **Conditional branches**: `*if`, `*elseif`, `*else`  
 - **Iteration**: `*for`  
@@ -357,7 +357,7 @@ can be answered directly by reading the HTML.
 
 ### 6.2 Systematization via template and scope
 
-Each Nablla element holds:
+Each Sercrod element holds:
 
 - an internal template  
 - a data scope  
@@ -371,11 +371,11 @@ On update, the following sequence is executed:
 
 ### 6.3 An update model without diffs
 
-`update()` in Nablla does not compare the existing DOM with the new structure. Instead it follows a simple procedure:
+`update()` in Sercrod does not compare the existing DOM with the new structure. Instead it follows a simple procedure:
 
 - clear the internal DOM of the host element  
 - evaluate the template and construct a new DOM  
-- call `update()` recursively on child Nablla elements if needed  
+- call `update()` recursively on child Sercrod elements if needed  
 - reflect attributes and text nodes
 
 Because the update model does not carry its own diffing layer, all update rules are fully described in terms of the template and attributes.
@@ -387,7 +387,7 @@ Virtual DOM based approaches gain flexibility from their virtual structures, but
 - two parallel views of state (internal and DOM)  
 - a diffing layer that exists independently of UI logic
 
-The Nablla type model does not attempt to modify such architectures. Instead it belongs to a different family that:
+The Sercrod type model does not attempt to modify such architectures. Instead it belongs to a different family that:
 
 - does not maintain a virtual DOM  
 - treats attributes and the DOM as the only official state representation  
@@ -397,7 +397,7 @@ This is not an argument that one family dominates the other. It is a classificat
 
 ### 6.5 Scope separation based on Web Components
 
-Using Custom Elements, each Nablla component has its own scope and lifecycle. This yields:
+Using Custom Elements, each Sercrod component has its own scope and lifecycle. This yields:
 
 - clear separation boundaries in deep UI trees  
 - avoidance of accidental interference between parent and child scopes
@@ -406,7 +406,7 @@ Such structure simplifies reasoning about data and behaviors that belong to each
 
 ### 6.6 Summary of distinctiveness
 
-The distinctiveness of the Nablla type model lies in the combination of:
+The distinctiveness of the Sercrod type model lies in the combination of:
 
 - an attribute-first UI description system  
 - a full regeneration update model  
@@ -418,7 +418,7 @@ The model does not manipulate rendering internals. Instead, it systematizes how 
 
 ## Chapter 7. Internal Structure and Processing Steps
 
-This chapter reformulates `update()` and the internal model of Nablla as abstract procedures independent of any concrete language.
+This chapter reformulates `update()` and the internal model of Sercrod as abstract procedures independent of any concrete language.
 
 ### 7.1 Overview of `update()`
 
@@ -463,7 +463,7 @@ DOM reconstruction follows these steps:
 
 - clear the internal DOM content of the host element  
 - construct new nodes according to the evaluated template  
-- for each nested Nablla element, call its `update()` as needed  
+- for each nested Sercrod element, call its `update()` as needed  
 - attach attributes and text nodes
 
 The key point is that there is no diffing: the DOM is rebuilt based solely on the template and the current scope.
@@ -494,7 +494,7 @@ Appendix C formalizes these properties in a more model-like style.
 
 ## Chapter 8. Advantages and Systematic Positioning
 
-This chapter summarizes the advantages of the Nablla type model as derived from the preceding structure.
+This chapter summarizes the advantages of the Sercrod type model as derived from the preceding structure.
 
 ### 8.1 Structural stability by template primacy
 
@@ -525,7 +525,7 @@ The choice is deliberate: it emphasizes predictable behavior over maximum optimi
 
 ### 8.4 Alignment with DOM engine optimizations
 
-The Nablla type model uses the DOM engine directly, without extra layers such as virtual DOM or custom diff structures.
+The Sercrod type model uses the DOM engine directly, without extra layers such as virtual DOM or custom diff structures.
 
 Thus:
 
@@ -536,7 +536,7 @@ The focus of this document is on the structure of the model, not on absolute per
 
 ### 8.5 Long-term maintainability via HTML-centric description
 
-Nablla code is defined entirely within HTML documents. This yields:
+Sercrod code is defined entirely within HTML documents. This yields:
 
 - UI behavior that can be explained by HTML files alone  
 - easier integration with external tools such as static site generators and content management systems  
@@ -544,7 +544,7 @@ Nablla code is defined entirely within HTML documents. This yields:
 
 ### 8.6 Summary of systematic positioning
 
-Taken together, the Nablla type model can be classified as a UI design framework whose core is:
+Taken together, the Sercrod type model can be classified as a UI design framework whose core is:
 
 - template primacy  
 - attribute-first semantics  
@@ -556,7 +556,7 @@ It is a family distinct from virtual DOM based and imperative DOM manipulation b
 
 ## Chapter 9. Academic Positioning and Future Applications
 
-This chapter considers the Nablla type model as an abstract concept and outlines its potential applications.
+This chapter considers the Sercrod type model as an abstract concept and outlines its potential applications.
 
 ### 9.1 Three conceptual pillars
 
@@ -581,7 +581,7 @@ Virtual DOM based models:
 - compute diffs between successive virtual structures  
 - apply those diffs to the real DOM
 
-The Nablla type model:
+The Sercrod type model:
 
 - maintains no virtual structure  
 - uses attributes and the DOM as the only state representation  
@@ -591,7 +591,7 @@ This difference is not only technical but also systematic in terms of how models
 
 ### 9.3 Target problem domains
 
-The Nablla type model fits well to problem domains characterized by:
+The Sercrod type model fits well to problem domains characterized by:
 
 - hierarchical UI structures  
 - a desire to unify specification and implementation in HTML  
@@ -612,7 +612,7 @@ In documentation, the attribute system can be transcribed almost directly into t
 
 ### 9.5 Academic significance
 
-The Nablla type model offers a unique framework in UI design theory by combining:
+The Sercrod type model offers a unique framework in UI design theory by combining:
 
 - template primacy  
 - attribute-centered semantics  
@@ -622,21 +622,21 @@ These characteristics place the model in a category that has not been clearly na
 
 ---
 
-## Chapter 10. Conclusion ? A Systematic Framework for Nablla Type Models
+## Chapter 10. Conclusion ? A Systematic Framework for Sercrod Type Models
 
-Throughout this document, using Nablla as a reference, we have organized:
+Throughout this document, using Sercrod as a reference, we have organized:
 
 - an attribute-first UI model  
 - template primacy as a structural principle  
 - full regeneration as the update procedure
 
-The Nablla type model:
+The Sercrod type model:
 
 - concentrates state in attributes and the DOM  
 - reconstructs the DOM from templates  
 - does not maintain a virtual DOM
 
-Rendering optimizations are delegated to the standard DOM engine of the environment. Nablla itself focuses on the principles for using attributes and the DOM.
+Rendering optimizations are delegated to the standard DOM engine of the environment. Sercrod itself focuses on the principles for using attributes and the DOM.
 
 This document is not a usage manual for a specific implementation, but:
 
@@ -648,7 +648,7 @@ The model has potential applications in education, documentation, template gener
 
 ---
 
-## Appendix A. Glossary (Basic Vocabulary of the Nablla Type Model)
+## Appendix A. Glossary (Basic Vocabulary of the Sercrod Type Model)
 
 ### A.1 Template related terms
 
@@ -736,7 +736,7 @@ The model has potential applications in education, documentation, template gener
 - **Execution model**  
   The overall pipeline of template extraction, scope evaluation, DOM reconstruction, and rendering.
 
-### A.8 Vocabulary specific to the Nablla type model
+### A.8 Vocabulary specific to the Sercrod type model
 
 - **Attribute-first**  
   The principle that state is represented primarily by attributes and the DOM, without additional parallel state trees.
@@ -751,7 +751,7 @@ The model has potential applications in education, documentation, template gener
 
 ## Appendix B. Process Flow (Staged Model of Updates)
 
-This appendix defines the update procedure of the Nablla type model as a staged flow.
+This appendix defines the update procedure of the Sercrod type model as a staged flow.
 
 ### B.1 Overall structure
 
@@ -788,7 +788,7 @@ During DOM reconstruction:
 
 - the internal DOM of the host is cleared  
 - new nodes are generated according to the evaluated template  
-- nested Nablla elements, if any, receive calls to `update()`  
+- nested Sercrod elements, if any, receive calls to `update()`  
 - attributes and text nodes are applied
 
 ### B.5 Post-processing
@@ -812,7 +812,7 @@ The staged model supports:
 
 ## Appendix C. Internal Model
 
-This appendix defines the internal structure of the Nablla type model in a more formal style.
+This appendix defines the internal structure of the Sercrod type model in a more formal style.
 
 ### C.1 Purpose
 
@@ -916,4 +916,4 @@ The model explicitly does not guarantee:
 
 The cost of updating large DOM structures is delegated to the environment that executes the DOM operations.
 
-This internal model makes explicit the assumptions and guarantees of the Nablla type model and provides a formal basis for describing the attribute-driven full regeneration UI approach.
+This internal model makes explicit the assumptions and guarantees of the Sercrod type model and provides a formal basis for describing the attribute-driven full regeneration UI approach.

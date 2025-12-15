@@ -41,11 +41,11 @@ These fields are updated by the directive in response to socket events and are p
 
 The host dispatches the following CustomEvents:
 
-- `nablla-ws-before-connect` - right before attempting to connect. `detail` includes `{ host, url }`.
-- `nablla-ws-open` - after the socket reaches OPEN. `detail` includes `{ host, url }`.
-- `nablla-ws-message` - on each incoming message. `detail` includes `{ host, url, raw, body }` where `body` is JSON-parsed if possible.
-- `nablla-ws-error` - on socket error. `detail` includes `{ host, url, error }`.
-- `nablla-ws-close` - on close. `detail` includes `{ host, url, code, reason, wasClean }`.
+- `sercrod-ws-before-connect` - right before attempting to connect. `detail` includes `{ host, url }`.
+- `sercrod-ws-open` - after the socket reaches OPEN. `detail` includes `{ host, url }`.
+- `sercrod-ws-message` - on each incoming message. `detail` includes `{ host, url, raw, body }` where `body` is JSON-parsed if possible.
+- `sercrod-ws-error` - on socket error. `detail` includes `{ host, url, error }`.
+- `sercrod-ws-close` - on close. `detail` includes `{ host, url, code, reason, wasClean }`.
 
 Event names and timings are stable. Payload shapes may include additional implementation-defined fields.
 
@@ -94,13 +94,13 @@ Helper presence and exact shapes are stable at the names above. Additional helpe
 ## Parameter changes and multiple hosts
 
 - Re-evaluating `*websocket` with a new URL or configuration closes the previous connection and opens a new one, updating state fields accordingly.
-- Multiple Nablla hosts can maintain independent sockets. State is not shared across hosts.
+- Multiple Sercrod hosts can maintain independent sockets. State is not shared across hosts.
 
 ---
 
 ## Error handling
 
-- Errors set `$ws_error` and dispatch `nablla-ws-error`.
+- Errors set `$ws_error` and dispatch `sercrod-ws-error`.
 - After an error or close, state fields reflect the last known values. `$ws_ready` becomes `false`.
 - Sending while not ready has no effect or logs a warning.
 

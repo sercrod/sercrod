@@ -1,10 +1,10 @@
 # Directives Overview  
 _Last updated: 2025-10-22_
 
-> This chapter introduces Nablla’s directive system and explains how HTML attributes control logic and data flow.  
+> This chapter introduces Sercrod’s directive system and explains how HTML attributes control logic and data flow.  
 
 ## 1) What Are Directives
-Directives are Nablla’s attribute-based mini-commands.
+Directives are Sercrod’s attribute-based mini-commands.
 They extend plain HTML with logic such as loops and conditions ? while remaining valid HTML.
 Every directive starts with an asterisk (`*`) and acts on its host element (some affect its children as noted).
 
@@ -52,9 +52,9 @@ Defines a scoped variable for the current element and its children.
 Works in text nodes **and** attributes.  
 
 ```html
-<h1 *let="message='Hello Nablla!'">%message%</h1>
+<h1 *let="message='Hello Sercrod!'">%message%</h1>
 
-<h1>Hello Nablla!</h1>
+<h1>Hello Sercrod!</h1>
 ^ rendered output
 > %message% - Output text content.
 ```
@@ -63,9 +63,9 @@ The variable defined by *let can be used in any child element.
 
 You can also...:
 ```html
-<h1 *let="message='Hello Nablla!'" *print="message"></h1>
+<h1 *let="message='Hello Sercrod!'" *print="message"></h1>
 
-<h1>Hello Nablla!</h1>
+<h1>Hello Sercrod!</h1>
 ^ rendered output
 > *print - Output text content.
 ```
@@ -159,7 +159,7 @@ You can also access the index if needed.
 </ul>
 ^ rendered output
 > `*for` - Supports both index and value.  
-> `in` can also be used, but Nablla will warn about deprecated syntax.
+> `in` can also be used, but Sercrod will warn about deprecated syntax.
 ```
 
 Legacy style (keys via `in`):
@@ -184,7 +184,7 @@ Legacy style (keys via `in`):
 Connects a form control’s value with a variable. Works with `<input>`, `<textarea>`, and `<select>`.
 When the user edits the field, the variable updates.
 When the variable changes, the field reflects it.  
-_Note: This example uses a Nablla host (`data={}`) to store the value.
+_Note: This example uses a Sercrod host (`data={}`) to store the value.
 You’ll learn more about `data` in the next section._
 
 ```html
@@ -196,29 +196,29 @@ You’ll learn more about `data` in the next section._
 ^ rendered output (before typing)
 
 <input *input="name">
-<p>Hello, Nablla!</p>
-^ rendered output (after confirming input "Nablla")
+<p>Hello, Sercrod!</p>
+^ rendered output (after confirming input "Sercrod")
 
 ```
 
 Textareas behave the same:
 
 ```html
-<na-blla>
+<serc-rod>
   <textarea *input="note"></textarea>
   <p>%note%</p>
-<na-blla>
+<serc-rod>
 
-<na-blla>
+<serc-rod>
   <textarea *input="note"></textarea>
   <p>%note%</p>
-<na-blla>
+<serc-rod>
 ^ rendered output (before typing)
 
-<na-blla>
+<serc-rod>
   <textarea *input="note">Short message.</textarea>
   <p>Short message.</p>
-<na-blla>
+<serc-rod>
 ^ rendered output (after confirming input "Short message.")
 ```
 

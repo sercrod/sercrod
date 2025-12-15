@@ -14,7 +14,7 @@ This page defines:
 
 ## Categories
 
-Nablla classifies issues into these areas for reporting:
+Sercrod classifies issues into these areas for reporting:
 
 - **http** - `*fetch`, `*post`, `*api` failures, timeouts, non-2xx responses, or response parse errors.
 - **upload** - `*upload` initiation failures, transport errors, non-2xx responses, or response parse errors.
@@ -24,7 +24,7 @@ Nablla classifies issues into these areas for reporting:
 - **parse** - failures during template parsing, AST hook execution, or pre-hook processing.
 - **other** - any unclassified issue.
 
-Implementations may add subcodes internally but must expose the top-level `area` above when emitting `nablla-error`.
+Implementations may add subcodes internally but must expose the top-level `area` above when emitting `sercrod-error`.
 
 ---
 
@@ -32,11 +32,11 @@ Implementations may add subcodes internally but must expose the top-level `area`
 
 ### Lifecycle
 
-#### `nablla-updated`
+#### `sercrod-updated`
 - **When**: after the DOM for the cycle is committed, immediately before transient cleanup is scheduled for the next frame.
 - **detail**: `{ host }`
 
-#### `nablla-error`
+#### `sercrod-error`
 - **When**: an unrecoverable failure surfaces to the host and the operation cannot complete as intended.
 - **detail**: `{ host, area, error }`  
   - `area`: one of the categories above  
@@ -44,27 +44,27 @@ Implementations may add subcodes internally but must expose the top-level `area`
 
 ### HTTP and API
 
-#### `nablla-api`
+#### `sercrod-api`
 - **When**: a `*fetch`, `*post`, or `*api` operation completes successfully.
 - **detail**: `{ host, url, status, body }`
 
-- **Error path**: emits `nablla-error` with `area: "http"` when the operation fails.
+- **Error path**: emits `sercrod-error` with `area: "http"` when the operation fails.
 
 ### File transfer
 
-#### `nablla-upload-start` / `nablla-upload-progress` / `nablla-uploaded`
+#### `sercrod-upload-start` / `sercrod-upload-progress` / `sercrod-uploaded`
 - **When**: upload lifecycle around `*upload`.
-- **Error path**: emits `nablla-error` with `area: "upload"` when the operation fails.
+- **Error path**: emits `sercrod-error` with `area: "upload"` when the operation fails.
 
-#### `nablla-download-start` / `nablla-downloaded`
+#### `sercrod-download-start` / `sercrod-downloaded`
 - **When**: download lifecycle around `*download`.
-- **Error path**: emits `nablla-error` with `area: "download"` when the operation fails.
+- **Error path**: emits `sercrod-error` with `area: "download"` when the operation fails.
 
 ### WebSocket
 
-#### `nablla-ws-before-connect` / `nablla-ws-open` / `nablla-ws-message` / `nablla-ws-close`
+#### `sercrod-ws-before-connect` / `sercrod-ws-open` / `sercrod-ws-message` / `sercrod-ws-close`
 - **When**: WebSocket lifecycle around `*websocket`.
-- **Error path**: emits `nablla-ws-error` and may also emit `nablla-error` with `area: "websocket"`.
+- **Error path**: emits `sercrod-ws-error` and may also emit `sercrod-error` with `area: "websocket"`.
 
 ---
 
@@ -99,11 +99,11 @@ Notes:
   - Pre-hook failure: continue with the unmodified template input.
 
 ### Network and file failures
-- Transport failures, non-2xx status (when treated as failure), and parse errors emit `nablla-error` with the appropriate `area`.
-- Where a completion event exists (e.g., `nablla-api`/`nablla-uploaded`/`nablla-downloaded`), it is not emitted on failure.
+- Transport failures, non-2xx status (when treated as failure), and parse errors emit `sercrod-error` with the appropriate `area`.
+- Where a completion event exists (e.g., `sercrod-api`/`sercrod-uploaded`/`sercrod-downloaded`), it is not emitted on failure.
 
 ### WebSocket failures
-- Connection or protocol errors emit `nablla-ws-error` and may additionally emit `nablla-error` with `area: "websocket"`.
+- Connection or protocol errors emit `sercrod-ws-error` and may additionally emit `sercrod-error` with `area: "websocket"`.
 - After close or error, state fields reflect the last known values; `$ws_ready` becomes `false`.
 
 ---
@@ -120,12 +120,12 @@ Notes:
 Within a successful cycle that includes side effects:
 
 1) Side-effect directive completes and writes results to host data.  
-2) Associated completion event is dispatched (`nablla-api` / `nablla-uploaded` / `nablla-downloaded` / `nablla-ws-*`).  
-3) `nablla-updated` is dispatched after the DOM commit for the cycle.  
+2) Associated completion event is dispatched (`sercrod-api` / `sercrod-uploaded` / `sercrod-downloaded` / `sercrod-ws-*`).  
+3) `sercrod-updated` is dispatched after the DOM commit for the cycle.  
 4) On the next animation frame, transient cleanup runs and clears `$upload`, `$download`, and all `*into` keys recorded during the cycle.
 
 On failure:
-- The corresponding error event is emitted (`nablla-error` and/or `nablla-ws-error`), and no completion event for that operation is dispatched.
+- The corresponding error event is emitted (`sercrod-error` and/or `sercrod-ws-error`), and no completion event for that operation is dispatched.
 
 ---
 

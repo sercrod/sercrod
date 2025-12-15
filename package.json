@@ -1,11 +1,11 @@
 {
-	"name": "nablla",
+	"name": "sercrod",
 	"version": "0.0.3",
-	"description": "Reserved for Nablla brand",
+	"description": "Reserved for Sercrod brand",
 	"main": "index.js",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/hitoshi-watase/nablla.git"
+		"url": "https://github.com/hitoshi-watase/sercrod.git"
 	},
 	"license": "MIT"
 }

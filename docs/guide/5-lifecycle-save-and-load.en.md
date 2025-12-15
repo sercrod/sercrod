@@ -1,19 +1,19 @@
 # Lifecycle (basic)
 _Last updated: 2025-10-22_
 
-> This chapter introduces Nablla’s local lifecycle features that let you save and restore data as JSON files directly in the browser.  
+> This chapter introduces Sercrod’s local lifecycle features that let you save and restore data as JSON files directly in the browser.  
 
 ## 30-second example
 ```html
-<na-blla data='{"question":"What is the present?","answer":"Instant."}'>
+<serc-rod data='{"question":"What is the present?","answer":"Instant."}'>
   <p>Q: %question%</p>
   <p>A: %answer%</p>
 
   <!-- Save current data as a JSON file -->
   <button *save>Save</button>
-</na-blla>
+</serc-rod>
 ```
-^ Rendered output (omit <na-blla>)
+^ Rendered output (omit <serc-rod>)
 ```html
 <p>Q: What is the present?</p>
 <p>A: Instant.</p>
@@ -22,7 +22,7 @@ _Last updated: 2025-10-22_
 
 What happens  
 1. You click the **Save** button.  
-2. Nablla converts the current data to JSON format.  
+2. Sercrod converts the current data to JSON format.  
 3. The browser automatically downloads it as a `.json` file.
 
 ---
@@ -39,21 +39,21 @@ This file can later be reloaded with *load.
 
 ## Beginner notes
 - The file format is JSON.  
-- The saved data reflects the current state of the Nablla element.  
-- The browser will usually name it something like `Nablla-20251021-151515.json`.  
+- The saved data reflects the current state of the Sercrod element.  
+- The browser will usually name it something like `Sercrod-20251021-151515.json`.  
 - Saving happens entirely in the browser; no data is sent anywhere.  
 
 ---
 
 ## How it fits your page
 - Use `*save` on a button or clickable element.  
-- When clicked, Nablla serializes the element’s data and downloads it.  
+- When clicked, Sercrod serializes the element’s data and downloads it.  
 - Pair it with `*load` to restore the same state later.  
 
 ---
 
 ## Event
-- Fires a `nablla-saved` event after completion.  
+- Fires a `sercrod-saved` event after completion.  
 - The event’s `detail` object includes a `json` field containing the serialized data.
 - For complete event details, see the Event Reference.  
 
@@ -71,23 +71,23 @@ That’s where *load begins.
 
 ## 30-second example
 ```html
-<na-blla data='{"question":"What is the past?","answer":"Memory."}'>
+<serc-rod data='{"question":"What is the past?","answer":"Memory."}'>
   <p>Q: %question%</p>
   <p>A: %answer%</p>
 
   <!-- Pick a JSON file and apply it to this page's data -->
   <input type="file" accept="application/json" *load>
-</na-blla>
+</serc-rod>
 
 <p>Q: What is the past?</p>
 <p>A: Memory.</p>
 <input type="file">
-^ Rendered output before loading (omit <na-blla>)
+^ Rendered output before loading (omit <serc-rod>)
 ```
 
 What happens  
-1. You choose a file such as **Nablla-20251021-151515.json**.  
-2. Nablla reads it as JSON and updates the data inside this Nablla element.  
+1. You choose a file such as **Sercrod-20251021-151515.json**.  
+2. Sercrod reads it as JSON and updates the data inside this Sercrod element.  
 3. The UI automatically re-renders with the new values.
 
 ---
@@ -99,7 +99,7 @@ Upload that file through the *load input ? it restores the same “present” st
 ```html
 <p>Q: What is the present?</p>
 <p>A: Instant.</p>
-^ Rendered output after loading (omit <na-blla>)
+^ Rendered output after loading (omit <serc-rod>)
 ```
 
 ## Try a new JSON file
@@ -113,7 +113,7 @@ Create this JSON file and upload it through the *load input.
 <p>Q: What is the future?</p>
 <p>A: 42</p>
 ```
-^ Rendered output after loading (omit <na-blla>)
+^ Rendered output after loading (omit <serc-rod>)
 
 ---
 
@@ -134,19 +134,19 @@ Create this JSON file and upload it through the *load input.
 
 ## Spec details ? confirmed facts only
 ### Completion event
-- Event name: `nablla-loaded`  
-- Target: the Nablla element that performed the load  
+- Event name: `sercrod-loaded`  
+- Target: the Sercrod element that performed the load  
 - Bubbling: `bubbles: true`  
 - Cross shadow boundary: `composed: true`  
 - `detail` payload:
-  - `host`: the originating Nablla element  
+  - `host`: the originating Sercrod element  
   - `fileName`: selected file name, or `null`  
   - `props`: additional info from implementation, or `null`  
   - `json`: the parsed JSON object
 
 ### Errors and warnings
 - When JSON is invalid or cannot be applied, show a warning and do not change the UI.  
-- Follow the project convention using the `[Nablla warn]` prefix.
+- Follow the project convention using the `[Sercrod warn]` prefix.
 
 ---
 
@@ -157,9 +157,9 @@ Create this JSON file and upload it through the *load input.
 
 
 Once you can load, the flow between data and page becomes complete.  
-From here, Nablla begins to move with your data.
+From here, Sercrod begins to move with your data.
 
 ## Summary
-The *save and *load directives form the local cycle of Nablla’s lifecycle.  
+The *save and *load directives form the local cycle of Sercrod’s lifecycle.  
 You save a moment, then bring it back ? data and view stay in harmony.  
 Next, *fetch and *post will extend this flow beyond your browser.

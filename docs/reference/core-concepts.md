@@ -1,18 +1,18 @@
 # Core Concepts
 
-_What you will find:_ the data model, scope rules, expression evaluation, interpolation, and how Nablla treats attributes and methods. This page defines the mental model used throughout the reference.
+_What you will find:_ the data model, scope rules, expression evaluation, interpolation, and how Sercrod treats attributes and methods. This page defines the mental model used throughout the reference.
 
 ## Host and data
 
-- **Host element**: a custom element instance that runs Nablla. The default tag is `<na-blla>`.
+- **Host element**: a custom element instance that runs Sercrod. The default tag is `<serc-rod>`.
 - **Data source**: the `data` attribute holds a JSON object. At runtime you can also assign `host.data = {...}`.
-- **Reactive wrapping**: Nablla wraps the data object using a Proxy so reads and writes can schedule updates.
-- **Immutability policy**: objects are not frozen. You may mutate nested structures; Nablla will observe and coalesce updates per frame.
+- **Reactive wrapping**: Sercrod wraps the data object using a Proxy so reads and writes can schedule updates.
+- **Immutability policy**: objects are not frozen. You may mutate nested structures; Sercrod will observe and coalesce updates per frame.
 
 ## Scope
 
 - **Current scope**: the scope for expressions is the host’s reactive data object.
-- **Parent scope**: within `*let` evaluation, Nablla injects `$parent` that points to the nearest ancestor host’s data. `$parent` is read-write and refers to the parent host’s reactive object.
+- **Parent scope**: within `*let` evaluation, Sercrod injects `$parent` that points to the nearest ancestor host’s data. `$parent` is read-write and refers to the parent host’s reactive object.
 - **Methods presence**: names registered through `*methods` become identifiers in the scope during evaluation. See Methods below.
 
 ## Expressions
@@ -37,7 +37,7 @@ _What you will find:_ the data model, scope rules, expression evaluation, interp
   - `*print` writes plain text.
   - `*compose` writes HTML.
   - `*textContent` and `*innerHTML` are synonyms for the above output behaviors.
-- **Filters**: Nablla applies built-in filters at well-defined points:
+- **Filters**: Sercrod applies built-in filters at well-defined points:
   - `text`, `html`, and `placeholder` for text interpolation and content output.
   - `attr` for attribute values.
   - `style` for style objects or strings.
@@ -45,7 +45,7 @@ _What you will find:_ the data model, scope rules, expression evaluation, interp
 
 ## Attributes and shorthands
 
-- **Dynamic attributes**: any attribute can be bound by using an expression as its value through Nablla’s binding rules.
+- **Dynamic attributes**: any attribute can be bound by using an expression as its value through Sercrod’s binding rules.
 - **Shorthands**:
   - `:class="expr"` updates `class` based on `expr` (string, array, or object map).
   - `:style="expr"` updates `style` based on `expr` (string or object map).
@@ -73,9 +73,9 @@ _What you will find:_ the data model, scope rules, expression evaluation, interp
 
 ## Update model primer
 
-- **Coalescing**: Nablla batches multiple data changes in the same frame and renders once.
+- **Coalescing**: Sercrod batches multiple data changes in the same frame and renders once.
 - **Template**: the host captures its initial innerHTML as the template for rendering.
-- **AST and hooks**: Nablla parses templates into a lightweight AST and runs registered AST hooks before rendering. Details are in the Advanced page.
+- **AST and hooks**: Sercrod parses templates into a lightweight AST and runs registered AST hooks before rendering. Details are in the Advanced page.
 
 ## Reserved names and specials
 

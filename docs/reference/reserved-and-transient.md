@@ -4,7 +4,7 @@ _What you will find:_ a normative list of names and fields that are reserved by 
 
 ## 1) Reserved directive attributes
 
-These attribute names are reserved for Nablla and must not be repurposed for application data or other libraries on the same element. The `n-` form is equivalent to the `*` form.
+These attribute names are reserved for Sercrod and must not be repurposed for application data or other libraries on the same element. The `n-` form is equivalent to the `*` form.
 
 - Control flow: `*if`, `*elseif`, `*else`, `*switch`, `*case`, `*case.break`, `*break`, `*default`
 - Iteration: `*each`, `*for`
@@ -34,7 +34,7 @@ Notes:
 
 ## 3) Reserved data keys on the host
 
-Keys starting with `$` are reserved for Nablla’s own use. Applications must not rely on their persistence or overwrite them unless explicitly documented.
+Keys starting with `$` are reserved for Sercrod’s own use. Applications must not rely on their persistence or overwrite them unless explicitly documented.
 
 ### Transient file-operation keys
 - `$upload` - set by `*upload` for the cycle that produced the result. **Transient** (see §4).
@@ -63,12 +63,12 @@ Transient values are visible **only during the update cycle that produced them**
   - `*into="name"` on HTTP/API/File directives: writes the result to `data[name]` **for the current cycle only**
 - **Cleanup timing**:
   1) Operation completes and writes to host data.
-  2) Completion event is dispatched (e.g., `nablla-api`, `nablla-uploaded`, `nablla-downloaded`).
-  3) `nablla-updated` fires after the DOM commit.
+  2) Completion event is dispatched (e.g., `sercrod-api`, `sercrod-uploaded`, `sercrod-downloaded`).
+  3) `sercrod-updated` fires after the DOM commit.
   4) Next frame: runtime clears `$upload`, `$download`, and every key recorded via `*into` in that cycle.
 
 Implications:
-- Code that needs to observe a transient must do so synchronously within or immediately after the completion event or the `nablla-updated` of the same cycle.
+- Code that needs to observe a transient must do so synchronously within or immediately after the completion event or the `sercrod-updated` of the same cycle.
 - Do not store business state in `*into` targets unless you copy it to non-transient keys before cleanup.
 
 ## 5) Observed attributes (special parsing)
@@ -93,8 +93,8 @@ Do not attach application properties with the following names to the host elemen
 ## 7) Collision guidance
 
 - **Data keys**: avoid `$*` for application data. Prefer plain identifiers (e.g., `result`, `files`, `status`) or a namespaced object (e.g., `app.*`).
-- **Directive names**: never reuse reserved directive names for non-Nablla purposes on the same element.
-- **Shorthands**: `:class` and `:style` are consumed by Nablla; do not depend on other processors acting on the same attributes on Nablla-managed elements.
+- **Directive names**: never reuse reserved directive names for non-Sercrod purposes on the same element.
+- **Shorthands**: `:class` and `:style` are consumed by Sercrod; do not depend on other processors acting on the same attributes on Sercrod-managed elements.
 
 ---
 Back to index: [`README.md`](./README.md)
