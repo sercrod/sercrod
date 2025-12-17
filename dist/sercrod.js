@@ -1,4 +1,4 @@
-// Sercrod v0.1.0
+// Sercrod v0.1.1
 //
 // Sercrod は Web Components を基盤としたフレームワークです。
 // 最大の特徴は「属性を正とする」設計にあります。
@@ -598,9 +598,6 @@ In this pattern, *man documents the exact directive that is used on the button.
 	// ----------------------------------------
 	static _ensure_man_loaded(){
 		// 一度でも試したら二度目以降は何もしない
-		if(this._man_full_load_attempted){
-			return;
-		}
 		this._man_full_load_attempted = true;
 
 		// ブラウザ環境以外（Nodeのみなど）は何もしない
@@ -608,44 +605,32 @@ In this pattern, *man documents the exact directive that is used on the button.
 			return;
 		}
 
-		let url = this._man_url; // 外部から上書きされていればそれを優先
+		let url = this._man_url;  // 外部から上書きされていればそれを優先
 
 		try{
 			// URL が指定されていなければ、sercrod.js の場所から推測
 			if(!url){
 				let script_src = null;
-
-				// まず currentScript が使えるなら最優先
-				if(document.currentScript && document.currentScript.src){
-					script_src = document.currentScript.src;
-				}else{
-					const scripts = document.getElementsByTagName("script");
-
-					// 後ろから走査して候補を探す
-					for(let i=scripts.length-1;i>=0;i--){
-						const s = scripts[i];
-						if(!s.src) continue;
-
-						// クエリやハッシュを除いた末尾名を見る
-						const src_no_q = s.src.split("#")[0].split("?")[0];
-						const name = src_no_q.split("/").pop();
-
-						// sercrod.js / sercrod.min.js を許容 (必要なら増やす)
-						if(name==="sercrod.js" || name==="sercrod.min.js"){
-							script_src = s.src;
-							break;
-						}
-
-						// 見つからない場合のフォールバック: 最後に出てきた src 付き script
-						if(!script_src){
-							script_src = s.src;
-						}
+				const scripts = document.getElementsByTagName("script");
+				// 後ろから走査して、できれば sercrod.js を探す
+				for(let i=scripts.length-1;i>=0;i--){
+					const s = scripts[i];
+					if(!s.src) continue;
+					const name = s.src.split("/").pop();
+					if(name==="sercrod.js"){
+						script_src = s.src;
+						break;
+					}
+					// sercrod.js が見つからなければ、最後に出てきた src 付き script を候補にする
+					if(!script_src){
+						script_src = s.src;
 					}
 				}
-
 				if(script_src){
-					// sercrod.js と同じディレクトリに man.json がある想定
-					url = new URL("./man.json", script_src).href;
+					const m = script_src.match(/^(.*\/)[^\/]*$/);
+					const dir = m ? m[1] : "";
+					// デフォルト: sercrod.js と同じディレクトリに man.json がある想定
+					url = dir + "man.json";
 				}
 			}
 
@@ -710,7 +695,7 @@ In this pattern, *man documents the exact directive that is used on the button.
 		// デリミタを定義
 		delimiters : window.__Sercrod?.config?.delimiters || {start:"%", end:"%"},
 		include : {
-			warn_on_element : window.__Sercrod?.config?.include?.warn_on_element || true,
+			warn_on_element : window.__Sercrod?.config?.include?.warn_on_element ?? true,
 			remove_element_if_empty : window.__Sercrod?.config?.include?.remove_element_if_empty || false,
 			max_depth : window.__Sercrod?.config?.include?.max_depth || 16, // 既定最大層
 			terminator : null
@@ -744,6 +729,11 @@ In this pattern, *man documents the exact directive that is used on the button.
 				"selectionchange"
 			],
 			terminator : null
+		},
+		// web socket 関連
+		websocket : {
+			// 再接続を許可するか
+			internal_update : window.__Sercrod?.config?.websocket?.internal_update ?? false,
 		},
 		terminator : null
 	}
@@ -885,6 +875,9 @@ In this pattern, *man documents the exact directive that is used on the button.
 		// include系の層（入れ子段数）管理: Node -> depth
 		this._include_depth_map = new WeakMap();
 		this._include_max_depth = this.constructor._config.include.max_depth; // 既定最大層
+
+		// web socket の再接続を許可するか
+		this._ws_internal_update = this.constructor._config.websocket.internal_update;
 
 		// 観測モード
 		// - off: 差分は finalize 時の全体比較のみ（軽量だが即時検知なし）
