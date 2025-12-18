@@ -3039,17 +3039,17 @@ ${str}
 		//  *into / n-into … 受け皿の変数名（必須 / *api 専用）
 		//
 		//  原則：
-		//    - 応答は変形しない（配列/オブジェクト/プリミティブをそのまま格納）
-		//    - GET 系は $download、書き込み系は $upload にも置く（状態把握用）
-		//    - *into が無ければ実行しない（事故ゼロ）
-		//    - <input type="file" *api> は FormData で自動アップロード
-		//    - 自動発火は「同一 (method,url,into,bodyHash)」につき 1 回だけ
-		// ============================================================
-		if(work.hasAttribute("*api") || work.hasAttribute("n-api")){
-			const el      = work.cloneNode(false);
-			const urlRaw  = work.getAttribute("*api") ?? work.getAttribute("n-api") ?? "";
-			// *let などでローカルに上書きされた値も拾えるように、展開時は effScope を使う
-			const resolveUrl = () => this._expand_text(urlRaw, effScope, work); // 実行時に都度展開
+                //    - 応答は変形しない（配列/オブジェクト/プリミティブをそのまま格納）
+                //    - GET 系は $download、書き込み系は $upload にも置く（状態把握用）
+                //    - *into が無ければ実行しない（事故ゼロ）
+                //    - <input type="file" *api> は FormData で自動アップロード
+                //    - 自動発火は「同一 (method,url,into,bodyHash)」につき 1 回だけ
+                // ============================================================
+                if(work.hasAttribute("*api") || work.hasAttribute("n-api")){
+                        const el      = work.cloneNode(false);
+                        const urlRaw  = work.getAttribute("*api") ?? work.getAttribute("n-api") ?? "";
+                        // *let などでローカルに上書きされた値も拾えるように、展開時は effScope を使う
+                        const resolveUrl = () => this._expand_text(urlRaw, effScope, work); // 実行時に都度展開
 			const method  = (work.getAttribute("method") || "GET").toUpperCase();
 			const into    = work.getAttribute("*into") ?? work.getAttribute("n-into") ?? "";
 			const bodyExp = work.getAttribute("body")  || work.getAttribute("payload") || "";
@@ -3160,30 +3160,54 @@ ${str}
 				return `${method} ${dedup} :: ${into} :: ${bodyHash}`;
 			};
 
-			const tag  = el.tagName.toUpperCase();
-			const type = (el.getAttribute("type")||"").toLowerCase();
-			const isClickable = tag==="BUTTON" || (tag==="A" && !el.hasAttribute("download")) || (tag==="INPUT" && ["button","submit","reset"].includes(type));
+                        const tag  = el.tagName.toUpperCase();
+                        const type = (el.getAttribute("type")||"").toLowerCase();
+                        const isClickable = tag==="BUTTON" || (tag==="A" && !el.hasAttribute("download")) || (tag==="INPUT" && ["button","submit","reset"].includes(type));
 
-			if (isFile) {
-				el.addEventListener("change", ()=>{
-					const files = el.files ? Array.from(el.files) : [];
-					if(files.length) runUpload(files);
-				});
+                        // *print / n-print のようなテキスト出力系も *api と併用できるようにする
+                        const tryApplyText = ()=>{
+                                if(el.hasAttribute("*print") || el.hasAttribute("n-print") || el.hasAttribute("*textContent") || el.hasAttribute("n-textContent")){
+                                        const norm = this.normalizeTpl ? (s)=>this.normalizeTpl(s) : (s)=>s;
+                                        const srcAttr = el.hasAttribute("*print") ? "*print" : el.hasAttribute("n-print") ? "n-print" : el.hasAttribute("*textContent") ? "*textContent" : "n-textContent";
+                                        try{
+                                                let expr = el.getAttribute(srcAttr);
+                                                expr = norm(expr);
+                                                const v = this.eval_expr(expr, scope, {el: work, mode: srcAttr.replace(/^\*/,"")});
+                                                const raw = (v==null || v===false) ? "" : v;
+                                                el.textContent = this.constructor._filters.text(raw, {el, expr, scope});
+                                                if(this.constructor._config.cleanup.directives){
+                                                        el.removeAttribute("*print");
+                                                        el.removeAttribute("n-print");
+                                                        el.removeAttribute("*textContent");
+                                                        el.removeAttribute("n-textContent");
+                                                }
+                                        }catch(_){ el.textContent = ""; }
+                                        return true;
+                                }
+                                return false;
+                        };
+                        const skipChildren = tryApplyText();
+
+                        if (isFile) {
+                                el.addEventListener("change", ()=>{
+                                        const files = el.files ? Array.from(el.files) : [];
+                                        if(files.length) runUpload(files);
+                                });
 			} else if (isClickable) {
 				// クリック系は自動発火しない（明示トリガ）
 				el.addEventListener("click", ()=> runJsonLike());
 			} else {
 				// 非クリック要素のみ初回自動発火。ts等は除外して一度きりにする
 				const onceKey = makeAutoOnceKey();
-				if(!this.__apiOnce.has(onceKey)){
-					this.__apiOnce.add(onceKey);
-					requestAnimationFrame(runJsonLike);
-				}
-			}
-			// 子要素は通常描画（*for/*if 等で into 変数や $pending を参照できる）
-			node.childNodes.forEach(c => this.renderNode(c, scope, el));
-			return;
-		}
+                                if(!this.__apiOnce.has(onceKey)){
+                                        this.__apiOnce.add(onceKey);
+                                        requestAnimationFrame(runJsonLike);
+                                }
+                        }
+                        // 子要素は通常描画（*for/*if 等で into 変数や $pending を参照できる）
+                        if(!skipChildren) node.childNodes.forEach(c => this.renderNode(c, scope, el));
+                        return;
+                }
 
 		// *upload: 「式文字列」を取り出して _bind_upload に渡す
 		//  - expr は effScope（*let 反映後のスコープ）で評価させるため、
