@@ -2665,7 +2665,7 @@ ${str}
 									const unit = work.cloneNode(true);
 									unit.removeAttribute("*for");
 									unit.removeAttribute("n-for");
-									this._renderElement(unit, {...effScope, [keyName]: k, [valName]: v}, parent);
+									this.renderNode(unit, {...effScope, [keyName]: k, [valName]: v}, parent);
 								}
 							}else{
 								// value of array
@@ -2673,7 +2673,7 @@ ${str}
 									const unit = work.cloneNode(true);
 									unit.removeAttribute("*for");
 									unit.removeAttribute("n-for");
-									this._renderElement(unit, {...effScope, [valName]: v}, parent);
+									this.renderNode(unit, {...effScope, [valName]: v}, parent);
 								}
 							}
 						}else if(iterable && typeof iterable === "object"){
@@ -2682,7 +2682,7 @@ ${str}
 								const unit = work.cloneNode(true);
 								unit.removeAttribute("*for");
 								unit.removeAttribute("n-for");
-								this._renderElement(unit, {...effScope, [keyName || "key"]: k, [valName]: v}, parent);
+								this.renderNode(unit, {...effScope, [keyName || "key"]: k, [valName]: v}, parent);
 							}
 						}
 					}
@@ -2696,10 +2696,10 @@ ${str}
 							unit.removeAttribute("n-for");
 							if(keyName){
 								// (key,value) in X なら両方束縛
-								this._renderElement(unit, {...effScope, [keyName]: k, [valName]: iterable[k]}, parent);
+								this.renderNode(unit, {...effScope, [keyName]: k, [valName]: iterable[k]}, parent);
 							}else{
 								// 単一変数 in X は **キー** を束縛（JS 準拠）
-								this._renderElement(unit, {...effScope, [valName]: k}, parent);
+								this.renderNode(unit, {...effScope, [valName]: k}, parent);
 							}
 						}
 					}
@@ -3031,75 +3031,6 @@ ${str}
 				}
 			});
 			parent.appendChild(el);
-			return;
-		}
-
-		// 9.4) *fetch
-		// - Sercrod ホストに付与時: connectedCallback 内で処理（ここでは通常要素のみ）
-		// - 通常要素に付与時:
-		//   - button / a / input[type=button|submit|reset|image] 等: クリック時に fetch
-		//   - それ以外: 初回描画時に一度だけ自動 fetch（onceKey で重複抑止）
-		if(work.hasAttribute("*fetch") || work.hasAttribute("n-fetch")){
-			const el   = work.cloneNode(false);
-			const spec_raw = work.getAttribute("*fetch") ?? work.getAttribute("n-fetch") ?? "";
-			const resolve_spec = () => this._resolve_fetch_spec(spec_raw, scope, work);
-			const spec = resolve_spec();
-
-			if(!spec){
-				if(this.error.warn) console.warn("[Sercrod warn] *fetch requires a URL spec");
-				parent.appendChild(el);
-				// 子要素だけは通常描画しておく
-				node.childNodes.forEach(c => this.renderNode(c, scope, el));
-				return;
-			}
-
-			// ホスト側の *fetch は connectedCallback で処理するので、
-			// ここでは通常要素（button / div / section 等）だけを扱う。
-			const tag  = el.tagName.toUpperCase();
-			const type = (el.getAttribute("type")||"").toLowerCase();
-			const isClickable =
-				tag==="BUTTON" ||
-				(tag==="A" && !el.hasAttribute("download")) ||
-				(tag==="INPUT" && ["button","submit","reset","image"].includes(type));
-
-			// 自動発火用 onceKey（ts パラメータは無視して一意性判定）
-			const makeOnceKey=()=>{
-				const spec_now = resolve_spec();
-				if(!spec_now) return "";
-				try{
-					const u = new URL(spec_now, location.href);
-					u.searchParams.delete("ts");
-					return u.pathname + (u.search ? "?" + u.searchParams.toString() : "");
-				}catch(_){
-					return spec_now.replace(/([?&])ts=[^&]*/g, "").replace(/[?&]$/, "");
-				}
-			};
-
-			// *api と同様、「一度だけ自動発火」用のメモ
-			this.__fetchOnce = this.__fetchOnce || new Set();
-
-			if(isClickable){
-				// クリック系は自動発火しない（明示トリガ）
-				el.addEventListener("click", ()=>{
-					const spec_now = resolve_spec();
-					if(spec_now) this._do_load(spec_now);
-				});
-			}else{
-				// 非クリック要素のみ初回自動発火
-				const onceKey = makeOnceKey();
-				if(onceKey && !this.__fetchOnce.has(onceKey)){
-					this.__fetchOnce.add(onceKey);
-					requestAnimationFrame(()=>{
-						const spec_now = resolve_spec();
-						if(spec_now) this._do_load(spec_now);
-					});
-				}
-			}
-
-			// 自分自身を出力
-			parent.appendChild(el);
-			// 子要素は通常描画（*if/*for/*print 等で fetch 結果を参照できる）
-			node.childNodes.forEach(c => this.renderNode(c, scope, el));
 			return;
 		}
 
@@ -3961,11 +3892,11 @@ ${str}
 				}
 			}
 		}
-		// -----------------------------
-		//  *prevent-default / *prevent
-		// -----------------------------
-		if(node.hasAttribute("*prevent-default") || node.hasAttribute("*prevent")){
-			const raw = node.getAttribute("*prevent-default") ?? node.getAttribute("*prevent") ?? "";
+                // -----------------------------
+                //  *prevent-default / *prevent
+                // -----------------------------
+                if(node.hasAttribute("*prevent-default") || node.hasAttribute("*prevent")){
+                        const raw = node.getAttribute("*prevent-default") ?? node.getAttribute("*prevent") ?? "";
 			const mode = (raw || "enter").toLowerCase();
 
 			if(mode==="enter" || mode==="all"){
@@ -3977,15 +3908,68 @@ ${str}
 				// form 要素に対して submit を止める
 				if(el.tagName==="FORM"){
 					el.addEventListener("submit", e=>e.preventDefault());
-				}
-			}
-		}
+                                }
+                        }
+                }
 
-		// -----------------------------
-		//  n-input（双方向バインディング）
-		// -----------------------------
-		const inputExpr = node.getAttribute("n-input") ?? node.getAttribute("*input");
-		if(inputExpr){
+                // -----------------------------
+                //  *fetch / n-fetch
+                // -----------------------------
+                if(node.hasAttribute("*fetch") || node.hasAttribute("n-fetch")){
+                        const spec_raw = node.getAttribute("*fetch") ?? node.getAttribute("n-fetch") ?? "";
+                        const resolve_spec = () => this._resolve_fetch_spec(spec_raw, scope, node);
+                        const spec = resolve_spec();
+
+                        if(!spec && this.error?.warn) console.warn("[Sercrod warn] *fetch requires a URL spec");
+
+                        const tag  = el.tagName.toUpperCase();
+                        const type = (el.getAttribute("type")||"").toLowerCase();
+                        const isClickable =
+                                tag==="BUTTON" ||
+                                (tag==="A" && !el.hasAttribute("download")) ||
+                                (tag==="INPUT" && ["button","submit","reset","image"].includes(type));
+
+                        const makeOnceKey=()=>{
+                                const spec_now = resolve_spec();
+                                if(!spec_now) return "";
+                                try{
+                                        const u = new URL(spec_now, location.href);
+                                        u.searchParams.delete("ts");
+                                        return u.pathname + (u.search ? "?" + u.searchParams.toString() : "");
+                                }catch(_){
+                                        return spec_now.replace(/([?&])ts=[^&]*/g, "").replace(/[?&]$/, "");
+                                }
+                        };
+
+                        this.__fetchOnce = this.__fetchOnce || new Set();
+
+                        if(isClickable){
+                                el.addEventListener("click", ()=>{
+                                        const spec_now = resolve_spec();
+                                        if(spec_now) this._do_load(spec_now);
+                                });
+                        }else{
+                                const onceKey = makeOnceKey();
+                                if(onceKey && !this.__fetchOnce.has(onceKey)){
+                                        this.__fetchOnce.add(onceKey);
+                                        requestAnimationFrame(()=>{
+                                                const spec_now = resolve_spec();
+                                                if(spec_now) this._do_load(spec_now);
+                                        });
+                                }
+                        }
+
+                        if(this.constructor._config.cleanup.directives){
+                                el.removeAttribute("*fetch");
+                                el.removeAttribute("n-fetch");
+                        }
+                }
+
+                // -----------------------------
+                //  n-input（双方向バインディング）
+                // -----------------------------
+                const inputExpr = node.getAttribute("n-input") ?? node.getAttribute("*input");
+                if(inputExpr){
 			const srcAttr = node.hasAttribute("n-input") ? "n-input" : node.hasAttribute("*input") ? "*input" : null;
 			const tag  = node.tagName.toUpperCase();
 			const type = (node.getAttribute("type")||"").toLowerCase();
